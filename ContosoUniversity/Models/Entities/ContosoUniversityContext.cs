@@ -1,23 +1,19 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ContosoUniversity.Models.Entities
 {
     public partial class ContosoUniversityContext : DbContext
     {
-        public virtual DbSet<Course> Course { get; set; }
-        public virtual DbSet<Enrollment> Enrollment { get; set; }
-        public virtual DbSet<Student> Student { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Enrollment> Enrollments { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
+
+
+        public ContosoUniversityContext(DbContextOptions<ContosoUniversityContext> options) : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=ContosoUniversity;Integrated Security=True");
-            }
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
