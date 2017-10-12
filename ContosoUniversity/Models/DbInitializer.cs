@@ -1,4 +1,5 @@
-﻿using ContosoUniversity.Models.Entities;
+﻿
+using ContosoUniversity.Models.Entities;
 using System;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace ContosoUniversity.Models
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.Students.Any())
+            if (context.Student.Any())
             {
                 return;   // DB has been seeded
             }
@@ -29,7 +30,7 @@ namespace ContosoUniversity.Models
             };
             foreach (Student s in students)
             {
-                context.Students.Add(s);
+                context.Student.Add(s);
             }
             context.SaveChanges();
 
@@ -47,7 +48,7 @@ namespace ContosoUniversity.Models
             };
             foreach (Course c in courses)
             {
-                context.Courses.Add(c);
+                context.Course.Add(c);
             }
             context.SaveChanges();
 
@@ -68,7 +69,7 @@ namespace ContosoUniversity.Models
             };
             foreach (Enrollment e in enrollments)
             {
-                context.Enrollments.Add(e);
+                context.Enrollment.Add(e);
             }
             context.SaveChanges();
         }

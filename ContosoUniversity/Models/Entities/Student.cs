@@ -7,7 +7,7 @@ namespace ContosoUniversity.Models.Entities
     {
         public Student()
         {
-            Enrollments = new HashSet<Enrollment>();
+            Enrollment = new HashSet<Enrollment>();
         }
 
         public int Id { get; set; }
@@ -15,6 +15,6 @@ namespace ContosoUniversity.Models.Entities
         public string FirstMidName { get; set; }
         public DateTime EnrollmentDate { get; set; }
 
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollment { get; set; }
     }
 }

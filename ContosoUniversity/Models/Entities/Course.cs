@@ -7,13 +7,13 @@ namespace ContosoUniversity.Models.Entities
     {
         public Course()
         {
-            Enrollments = new HashSet<Enrollment>();
+            Enrollment = new HashSet<Enrollment>();
         }
 
         public int CourseId { get; set; }
         public string Title { get; set; }
         public int Credits { get; set; }
 
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollment { get; set; }
     }
 }
