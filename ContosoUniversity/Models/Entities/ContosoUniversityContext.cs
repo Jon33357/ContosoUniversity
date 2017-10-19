@@ -36,7 +36,7 @@ namespace ContosoUniversity.Models.Entities
                 entity.Property(e => e.StudentId).HasColumnName("StudentID");
 
                 entity.HasOne(d => d.Course)
-                    .WithMany(p => p.Enrollment)
+                    .WithMany(p => p.Enrollments)
                     .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Enrollment_Course");
