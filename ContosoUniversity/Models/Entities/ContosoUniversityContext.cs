@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ContosoUniversity.Models.Entities
 {
@@ -15,6 +13,10 @@ namespace ContosoUniversity.Models.Entities
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<Enrollment> Enrollment { get; set; }
         public virtual DbSet<Student> Student { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Instructor> Instructors { get; set; }
+        public virtual DbSet<OfficeAssignment> OfficeAssignments { get; set; }
+        public virtual DbSet<CourseAssignment> CourseAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +64,14 @@ namespace ContosoUniversity.Models.Entities
                     .IsRequired()
                     .HasMaxLength(50);
             });
+
+            modelBuilder.Entity<Department>().ToTable("Department");
+            modelBuilder.Entity<Instructor>().ToTable("Instructor");
+            modelBuilder.Entity<OfficeAssignment>().ToTable("OfficeAssignment");
+            modelBuilder.Entity<CourseAssignment>().ToTable("CourseAssignment");
+
+            modelBuilder.Entity<CourseAssignment>()
+               .HasKey(c => new { c.CourseId, c.InstructorId });
         }
     }
 }
