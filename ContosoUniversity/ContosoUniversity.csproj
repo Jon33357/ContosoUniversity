@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Entities\Tmp\**" />
+    <Compile Remove="Models\Tmp\**" />
+    <Content Remove="Models\Entities\Tmp\**" />
+    <Content Remove="Models\Tmp\**" />
+    <EmbeddedResource Remove="Models\Entities\Tmp\**" />
+    <EmbeddedResource Remove="Models\Tmp\**" />
+    <None Remove="Models\Entities\Tmp\**" />
+    <None Remove="Models\Tmp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
@@ -20,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />

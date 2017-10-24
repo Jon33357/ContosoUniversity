@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models.Entities;
 
@@ -111,7 +109,7 @@ namespace ContosoUniversity.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException /*ex*/)
             {
                 
                 //Log the error (uncomment ex variable name and write a log.

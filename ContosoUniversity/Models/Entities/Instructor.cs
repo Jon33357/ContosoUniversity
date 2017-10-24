@@ -1,38 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ContosoUniversity.Models.Entities
 {
-    public class Instructor
+    public partial class Instructor
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50)]
-        public string LastName { get; set; }
-
-        [Required]
-        [Column("FirstName")]
-        [Display(Name = "First Name")]
-        [StringLength(50)]
-        public string FirstMidName { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Hire Date")]
-        public DateTime HireDate { get; set; }
-
-        [Display(Name = "Full Name")]
-        public string FullName
+        public Instructor()
         {
-            get { return LastName + ", " + FirstMidName; }
+            CourseAssignment = new HashSet<CourseAssignment>();
+            Department = new HashSet<Department>();
         }
 
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string LastName { get; set; }
+        public string FirstMidName { get; set; }
+        public DateTime HireDate { get; set; }
+
         public OfficeAssignment OfficeAssignment { get; set; }
+        public ICollection<CourseAssignment> CourseAssignment { get; set; }
+        public ICollection<Department> Department { get; set; }
     }
 }
