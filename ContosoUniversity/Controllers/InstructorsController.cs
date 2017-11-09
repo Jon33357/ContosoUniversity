@@ -26,12 +26,7 @@ namespace ContosoUniversity.Controllers
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignment)
                     .ThenInclude(i => i.Course)
-                        .ThenInclude(i => i.Enrollment)
-                            .ThenInclude(i => i.Student)
-                  .Include(i => i.CourseAssignment)
-                    .ThenInclude(i => i.Course)
                         .ThenInclude(i => i.Department)
-                  .AsNoTracking()
                   .OrderBy(i => i.LastName)
                   .ToListAsync();
 
@@ -46,8 +41,13 @@ namespace ContosoUniversity.Controllers
             if (courseID != null)
             {
                 ViewData["CourseID"] = courseID.Value;
-                viewModel.Enrollments = viewModel.Courses.Where(
-                    x => x.CourseId == courseID).Single().Enrollment;
+                var selectedCourse = viewModel.Courses.Where(x => x.CourseId == courseID).Single();
+                await _context.Entry(selectedCourse).Collection(x => x.Enrollment).LoadAsync();
+                foreach (Enrollment enrollment in selectedCourse.Enrollment)
+                {
+                    await _context.Entry(enrollment).Reference(x => x.Student).LoadAsync();
+                }
+                viewModel.Enrollments = selectedCourse.Enrollment;
             }
 
             return View(viewModel);
@@ -101,7 +101,10 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructor.SingleOrDefaultAsync(m => m.Id == id);
+            var instructor = await _context.Instructor
+                .Include(i => i.OfficeAssignment)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (instructor == null)
             {
                 return NotFound();
@@ -114,52 +117,41 @@ namespace ContosoUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LastName,FirstMidName,HireDate")] Instructor instructor)
-        {
-            if (id != instructor.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(instructor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InstructorExists(instructor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(instructor);
-        }
-
-        // GET: Instructors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> EditPost(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var instructor = await _context.Instructor
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (instructor == null)
-            {
-                return NotFound();
-            }
+            var instructorToUpdate = await _context.Instructor
+                .Include(i => i.OfficeAssignment)
+                .SingleOrDefaultAsync(s => s.Id == id);
 
-            return View(instructor);
+            if (await TryUpdateModelAsync<Instructor>(
+                instructorToUpdate,
+                "",
+                i => i.FirstMidName, i => i.LastName, i => i.HireDate, i => i.OfficeAssignment))
+            {
+                if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment?.Location))
+                {
+                    instructorToUpdate.OfficeAssignment = null;
+                }
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(instructorToUpdate);
+
         }
 
         // POST: Instructors/Delete/5

@@ -15,6 +15,7 @@ namespace ContosoUniversity.Models.Entities
         public int Id { get; set; }
         public string LastName { get; set; }
         public string FirstMidName { get; set; }
+        public string FullName { get { return this.FirstMidName + this.LastName; } }
         public DateTime EnrollmentDate { get; set; }
 
         public ICollection<Enrollment> Enrollment { get; set; }

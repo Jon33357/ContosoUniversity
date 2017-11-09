@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ContosoUniversity.Models.Entities
 {
@@ -11,6 +11,7 @@ namespace ContosoUniversity.Models.Entities
             Enrollment = new HashSet<Enrollment>();
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CourseId { get; set; }
         public string Title { get; set; }
         public int Credits { get; set; }
